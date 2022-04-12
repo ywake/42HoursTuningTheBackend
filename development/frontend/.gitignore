@@ -1,0 +1,17 @@
+# do not include the node modules in Git
+node_modules
+
+# do not include the local environment files
+.env
+.env.production
+
+# ローカルnodeバージョン制御用
+.node-version
+
+# ビルド後のソースディレクトリ
+dist
+
+/build
+
+# do not include the .DS_store in Git
+.DS_Store
