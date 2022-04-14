@@ -1,4 +1,4 @@
-## ローカル開発用環境
+## ローカル開発用環境について
 主にbackendの開発やその他の検証を、ローカル環境で実施できます。
 
 - docker-composeコマンドでビルド、起動できます。
@@ -29,7 +29,7 @@ $ docker-compose -f docker-compose-local.yaml up
 (```development/build.sh```が参考になるかもしれません。)
 
 ### ローカルAPIテスト
-ローカルで実行中の環境に対し、APIテストを実施できます。内容は```development/apiTestOnly.sh```と[同様](https://github.com/DreamArts/42Tokyo-hackathon-2204/blob/main/document/md/99_manual.md#api%E3%83%86%E3%82%B9%E3%83%88)です。
+ローカルで実行中の環境に対し、APIテストを実施できます。内容は```development/apiTestOnly.sh```と[同様](../document/md/99_manual.md#api%E3%83%86%E3%82%B9%E3%83%88)です。
 
 スクリプトと同じディレクトリで実行してください。
 ```
