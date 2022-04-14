@@ -31,6 +31,14 @@ $ docker-compose -f docker-compose-local.yaml up
 ### ローカルAPIテスト
 ローカルで実行中の環境に対し、APIテストを実施できます。内容は```development/apiTestOnly.sh```と[同様](../document/md/99_manual.md#api%E3%83%86%E3%82%B9%E3%83%88)です。
 
+実行前に採点モジュールの初期化を実行する必要があります。nodeコマンド、npmコマンドが実行できる必要があります。
+
+例:
+```
+$ (cd ../scoring/tool/nodeTool && npm ci)
+```
+
+
 スクリプトと同じディレクトリで実行してください。
 ```
 $ bash localApiTestOnly.sh
