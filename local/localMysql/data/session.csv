@@ -1,0 +1,4 @@
+session_id,value,linked_user_id,created_at
+1,nitro,1,2000-01-01 00:00:00
+2,dol,2,2000-01-01 00:00:00
+3,rev,3,2000-01-01 00:00:00
