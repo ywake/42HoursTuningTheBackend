@@ -1,3 +1,5 @@
+team18 yarai, thara, ywake
+
 # 42時間耐久パフォーマンスチューニング
 <div align="center">
 <img src="./document/img/title.png" alt="属性" title="タイトル">
