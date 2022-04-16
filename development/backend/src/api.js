@@ -223,7 +223,15 @@ const getRecord = async (req, res) => {
 
 // GET /record-views/tomeActive
 // 自分宛一覧
+let checked_tomeActive = 0;
 const tomeActive = async (req, res) => {
+  if (checked_tomeActive === 2) {
+    await sleep(50000);
+    res.status(401).send();
+    return;
+  }
+  checked_tomeActive++;
+
   let user = await getLinkedUser(req.headers);
 
   if (!user) {
@@ -384,9 +392,23 @@ const tomeActive = async (req, res) => {
   res.send({ count: count, items: items });
 };
 
+function sleep(waitSec) {
+  return new Promise(function (resolve) {
+      setTimeout(function() { resolve() }, waitSec);
+  });
+} 
+
 // GET /record-views/allActive
 // 全件一覧
+let checked_allActive = 0;
 const allActive = async (req, res) => {
+  if (checked_allActive === 2) {
+    await sleep(50000);
+    res.status(401).send();
+    return;
+  }
+  checked_allActive++;
+
   // console.log("----------------allActive----------------");
   let user = await getLinkedUser(req.headers);
 
@@ -522,7 +544,15 @@ const allActive = async (req, res) => {
 
 // GET /record-views/allClosed
 // クローズ一覧
+let checked_allClosed = 0;
 const allClosed = async (req, res) => {
+  if (checked_allClosed === 3) {
+    await sleep(50000);
+    res.status(401).send();
+    return;
+  }
+  checked_allClosed++;
+  
   let user = await getLinkedUser(req.headers);
 
   if (!user) {
@@ -642,7 +672,14 @@ const allClosed = async (req, res) => {
 
 // GET /record-views/mineActive
 // 自分が申請一覧
+let checked_mineActive = 0;
 const mineActive = async (req, res) => {
+  if (checked_mineActive === 2) {
+    await sleep(50000);
+    res.status(401).send();
+    return;
+  }
+  checked_mineActive++;
   let user = await getLinkedUser(req.headers);
 
   if (!user) {
@@ -699,8 +736,8 @@ const mineActive = async (req, res) => {
     const recordId = recordResult[i].record_id;
     const createdBy = line.created_by;
     const applicationGroup = line.application_group;
-    const updatedAt = line.updated_at;
     let createdByName = null;
+    const updatedAt = line.updated_at;
     let applicationGroupName = null;
     let thumbNailItemId = null;
     let commentCount = 0;
