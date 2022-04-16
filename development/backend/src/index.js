@@ -10,7 +10,7 @@ const pprof = require('pprof');
 async function prof() {
   console.log("start to profile >>>");
   const profile = await pprof.time.profile({
-    durationMillis: 30000,
+    durationMillis: 240000,
   });
 
   const buf = await pprof.encode(profile);
