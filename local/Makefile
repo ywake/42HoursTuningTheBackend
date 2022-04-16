@@ -1,6 +1,5 @@
 ROOT = ../
-CONTAINER_PREFIX = local_
-CONTAINER_SUFIX = _1
+CONTAINER_SUFIX = _container
 
 all: build
 
@@ -17,7 +16,7 @@ build-%: force
 	docker-compose up -d
 
 connect-%: force
-	docker exec -it $(CONTAINER_PREFIX)$*$(CONTAINER_SUFIX) bash
+	docker exec -it $*$(CONTAINER_SUFIX) bash
 
 eval: force
 	(cd $(ROOT)/scoring && bash evaluate.sh)
@@ -32,10 +31,10 @@ restore: force
 	(cd $(ROOT)/development && bash restoreOnly.sh)
 
 log-nginx:
-	docker exec $(CONTAINER_PREFIX)nginx$(CONTAINER_SUFIX) cat /var/log/nginx/nginx-access.log > access.log
+	docker exec nginx$(CONTAINER_SUFIX) cat /var/log/nginx/nginx-access.log > access.log
 
 log-mysql: force
-	docker exec $(CONTAINER_PREFIX)mysql$(CONTAINER_SUFIX) cat /var/log/mysql/slow.log > slow.log
+	docker exec mysql$(CONTAINER_SUFIX) cat /var/log/mysql/slow.log > slow.log
 
 digest: log-mysql
 	pt-query-digest slow.log > result.txt
@@ -43,7 +42,7 @@ digest: log-mysql
 	rm slow.log result.txt
 
 log-backend: force
-	docker exec $(CONTAINER_PREFIX)backend$(CONTAINER_SUFIX) cat /backend/wall.pb.gz > wall.pb.gz
+	docker exec backend$(CONTAINER_SUFIX) cat /backend/wall.pb.gz > wall.pb.gz
 
 ALP_CMD = alp ltsv --sort avg --reverse -m '/api/client/records/.+/comments,/api/client/records/.+/files/.+/thumbnail,/api/client/records/.+/files/.+,/api/client/records/.+'
 
