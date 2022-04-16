@@ -12,8 +12,8 @@ build-%: force
 	docker-compose -f development/docker-compose.yaml build $*
 	docker-compose -f development/docker-compose.yaml up -d
 
-connect-mysql:
-	docker exec -it development_mysql_1 bash
+connect-%: force
+	docker exec -it development_$*_1 bash
 
 eval:
 	(cd ./scoring && bash evaluate.sh)
@@ -47,6 +47,6 @@ alp: nginx-log
 	cat command.txt result.txt | discocat
 	rm access.log command.txt result.txt
 
-.PHONY: build down connect-mysql eval stress api restore nginx log-nginx log-mysql digest alp force
+.PHONY: build down eval stress api restore nginx log-nginx log-mysql digest alp force
 
 # force:
