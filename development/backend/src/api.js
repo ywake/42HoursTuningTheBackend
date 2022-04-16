@@ -403,7 +403,6 @@ const allActive = async (req, res) => {
     limit = 10;
   }
 
-
   // const searchRecordQs = `select * from record where status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
   const searchRecordQs = `SELECT rc.record_id, rc.created_by, rc.title, rc.application_group, rc.updated_at, u.name, gi.name as gi_name
   FROM record as rc
@@ -415,10 +414,7 @@ const allActive = async (req, res) => {
   LIMIT ? 
   OFFSET ?`;
 
-  const [recordResult] = await pool.query(searchRecordQs, [
-    limit,
-    offset,
-  ]);
+  const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
   // console.log(recordResult);
 
   const items = Array(recordResult.length);
@@ -942,13 +938,15 @@ const postFiles = async (req, res) => {
 
   await pool.query(
     `insert into file (file_id, path, name)
-        values (?, ?, ?)`,
-    [`${newId}`, `${filePath}${newId}_${name}`, `${name}`]
-  );
-  await pool.query(
-    `insert into file (file_id, path, name)
-        values (?, ?, ?)`,
-    [`${newThumbId}`, `${filePath}${newThumbId}_thumb_${name}`, `thumb_${name}`]
+        values (?, ?, ?), (?, ?, ?)`,
+    [
+      `${newId}`,
+      `${filePath}${newId}_${name}`,
+      `${name}`,
+      `${newThumbId}`,
+      `${filePath}${newThumbId}_thumb_${name}`,
+      `thumb_${name}`,
+    ]
   );
 
   res.send({ fileId: newId, thumbFileId: newThumbId });
