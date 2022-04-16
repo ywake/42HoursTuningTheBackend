@@ -24,9 +24,9 @@ nginx-log:
 ALP_CMD = alp ltsv --sort avg --reverse
 
 alp: nginx-log
-	echo $(ALP_CMD) > _tmp.txt
-	cat _tmp.txt access.log | $(ALP_CMD) > _tmp2.txt
-	cat _tmp.txt _tmp2.txt | discocat
-	rm access.log _tmp.txt _tmp2.txt
+	echo $(ALP_CMD) > command.txt
+	cat access.log | $(ALP_CMD) > result.txt
+	cat command.txt result.txt | discocat
+	rm access.log command.txt result.txt
 
 .PHONY: build eval log
