@@ -1,3 +1,4 @@
+[![Test](https://github.com/ywake/42HoursTuningTheBackend/actions/workflows/test.yml/badge.svg)](https://github.com/ywake/42HoursTuningTheBackend/actions/workflows/test.yml) [![Deploy](https://github.com/ywake/42HoursTuningTheBackend/actions/workflows/deploy.yml/badge.svg)](https://github.com/ywake/42HoursTuningTheBackend/actions/workflows/deploy.yml)
 team18 yarai, thara, ywake
 
 # 42時間耐久パフォーマンスチューニング
