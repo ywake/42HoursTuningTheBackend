@@ -403,22 +403,31 @@ const allActive = async (req, res) => {
     limit = 10;
   }
 
-  const searchRecordQs = `select * from record where status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
 
-  const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
+  // const searchRecordQs = `select * from record where status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
+  const searchRecordQs = `SELECT rc.record_id, rc.created_by, rc.title, rc.application_group, rc.updated_at, u.name, gi.name as gi_name
+  FROM record as rc
+  INNER JOIN user as u 
+  ON rc.status = "open" AND rc.created_by = u.user_id
+  INNER JOIN group_info as gi
+  ON rc.application_group = gi.group_id
+  ORDER BY rc.updated_at DESC, rc.record_id ASC
+  LIMIT ? 
+  OFFSET ?`;
+
+  const [recordResult] = await pool.query(searchRecordQs, [
+    limit,
+    offset,
+  ]);
   // console.log(recordResult);
 
   const items = Array(recordResult.length);
   let count = 0;
 
-  const searchUserQs = "select * from user where user_id = ?";
-  const searchGroupQs = "select * from group_info where group_id = ?";
   const searchThumbQs =
     "select * from record_item_file where linked_record_id = ? order by item_id asc limit 1";
   const countQs =
     "select count(*) from record_comment where linked_record_id = ?";
-  const searchLastQs =
-    "select * from record_last_access where user_id = ? and record_id = ?";
 
   for (let i = 0; i < recordResult.length; i++) {
     const resObj = {
@@ -436,7 +445,7 @@ const allActive = async (req, res) => {
     };
 
     const line = recordResult[i];
-    mylog(line);
+    // console.log(line);
     const recordId = recordResult[i].record_id;
     const createdBy = line.created_by;
     const applicationGroup = line.application_group;
@@ -447,15 +456,19 @@ const allActive = async (req, res) => {
     let commentCount = 0;
     let isUnConfirmed = true;
 
-    const [userResult] = await pool.query(searchUserQs, [createdBy]);
-    if (userResult.length === 1) {
-      createdByName = userResult[0].name;
-    }
+    // const searchUserQs = "select * from user where user_id = ?";
+    // const [userResult] = await pool.query(searchUserQs, [createdBy]);
+    // if (userResult.length === 1) {
+    //     createdByName = userResult[0].name;
+    //   }
+    createdByName = line.name;
 
-    const [groupResult] = await pool.query(searchGroupQs, [applicationGroup]);
-    if (groupResult.length === 1) {
-      applicationGroupName = groupResult[0].name;
-    }
+    // const searchGroupQs = "select * from group_info where group_id = ?";
+    // const [groupResult] = await pool.query(searchGroupQs, [applicationGroup]);
+    // if (groupResult.length === 1) {
+    //   applicationGroupName = groupResult[0].name;
+    // }
+    applicationGroupName = line.gi_name;
 
     const [itemResult] = await pool.query(searchThumbQs, [recordId]);
     if (itemResult.length === 1) {
@@ -467,17 +480,17 @@ const allActive = async (req, res) => {
       commentCount = countResult[0]["count(*)"];
     }
 
+    const searchLastQs =
+      "select * from record_last_access where user_id = ? and record_id = ?";
     const [lastResult] = await pool.query(searchLastQs, [
       user.user_id,
       recordId,
     ]);
-    if (lastResult.length === 1) {
-      mylog(updatedAt);
-      const updatedAtNum = Date.parse(updatedAt);
-      const accessTimeNum = Date.parse(lastResult[0].access_time);
-      if (updatedAtNum <= accessTimeNum) {
-        isUnConfirmed = false;
-      }
+    // console.log(updatedAt);
+    const updatedAtNum = Date.parse(updatedAt);
+    const accessTimeNum = Date.parse(lastResult[0].access_time);
+    if (updatedAtNum <= accessTimeNum) {
+      isUnConfirmed = false;
     }
 
     resObj.recordId = recordId;
@@ -501,6 +514,8 @@ const allActive = async (req, res) => {
   if (recordCountResult.length === 1) {
     count = recordCountResult[0]["count(*)"];
   }
+
+  // console.log(items)
 
   res.send({ count: count, items: items });
 };
