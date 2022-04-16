@@ -21,7 +21,7 @@ restore:
 nginx-log:
 	docker exec development_nginx_1 cat /var/log/nginx/nginx-access.log > access.log
 
-ALP_CMD = alp ltsv --sort avg --reverse
+ALP_CMD = alp ltsv --sort avg --reverse -m '/api/client/records/.+/comments,/api/client/records/.+/files/.+/thumbnail,/api/client/records/.+/files/.+,/api/client/records/.+'
 
 alp: nginx-log
 	echo $(ALP_CMD) > command.txt
