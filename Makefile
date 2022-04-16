@@ -1,3 +1,6 @@
+CONTAINER_PREFIX="development_"
+CONTAINER_SUFIX="_1"
+
 all: build
 
 build: force
@@ -32,6 +35,9 @@ log-nginx:
 
 log-mysql: force
 	docker exec development_mysql_1 cat /var/log/mysql/slow.log > slow.log
+
+logs-%: force
+	docker logs $(CONTAINER_PREFIX)$*$(CONTAINER_SUFIX) --follow
 
 digest: log-mysql
 	pt-query-digest slow.log > result.txt
