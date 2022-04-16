@@ -387,6 +387,7 @@ const tomeActive = async (req, res) => {
 // GET /record-views/allActive
 // 全件一覧
 const allActive = async (req, res) => {
+  // console.log("----------------allActive----------------");
   let user = await getLinkedUser(req.headers);
 
   if (!user) {
@@ -405,7 +406,7 @@ const allActive = async (req, res) => {
   const searchRecordQs = `select * from record where status = "open" order by updated_at desc, record_id asc limit ? offset ?`;
 
   const [recordResult] = await pool.query(searchRecordQs, [limit, offset]);
-  mylog(recordResult);
+  // console.log(recordResult);
 
   const items = Array(recordResult.length);
   let count = 0;
