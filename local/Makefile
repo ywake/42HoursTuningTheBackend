@@ -18,6 +18,9 @@ build-%: force
 connect-%: force
 	docker exec -it $*$(CONTAINER_SUFIX) bash
 
+logs-%: force
+	docker logs $*$(CONTAINER_SUFIX) --follow
+
 eval: force
 	(cd $(ROOT)/scoring && bash evaluate.sh)
 
@@ -43,6 +46,7 @@ digest: log-mysql
 
 log-backend: force
 	docker exec backend$(CONTAINER_SUFIX) cat /backend/wall.pb.gz > wall.pb.gz
+	docker exec backend$(CONTAINER_SUFIX) cat /backend/heap.pb.gz > heap.pb.gz
 
 ALP_CMD = alp ltsv --sort avg --reverse -m '/api/client/records/.+/comments,/api/client/records/.+/files/.+/thumbnail,/api/client/records/.+/files/.+,/api/client/records/.+'
 
@@ -56,6 +60,9 @@ alp: log-nginx
 # brew install brew install graphviz
 pprof: log-backend
 	pprof -http=: wall.pb.gz
+
+pprof-heap: log-backend
+	pprof -http=: heap.pb.gz
 
 .PHONY: force
 force:
