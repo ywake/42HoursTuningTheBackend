@@ -28,15 +28,15 @@ const mylog = (obj) => {
   // console.log(obj);
 };
 
+const getLinkedUserQs = `select linked_user_id from session where value = ?`;
 const getLinkedUser = async (headers) => {
   const target = headers["x-app-key"];
-  mylog(target);
-  const qs = `select * from session where value = ?`;
+  // mylog(target);
 
-  const [rows] = await pool.query(qs, [`${target}`]);
+  const [rows] = await pool.query(getLinkedUserQs, [`${target}`]);
 
   if (rows.length !== 1) {
-    mylog("セッションが見つかりませんでした。");
+    // mylog("セッションが見つかりませんでした。");
     return undefined;
   }
 
