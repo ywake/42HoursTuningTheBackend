@@ -5,6 +5,15 @@ build:
 	docker-compose -f development/docker-compose.yaml build --no-cache
 	docker-compose -f development/docker-compose.yaml up -d
 
+down:
+	docker-compose -f development/docker-compose.yaml down
+
+build-%: force
+	docker-compose -f development/docker-compose.yaml build $*
+	docker-compose -f development/docker-compose.yaml up -d
+
+connect-mysql:
+	docker exec -it development_mysql_1 bash
 
 eval:
 	(cd ./scoring && bash evaluate.sh)
@@ -18,8 +27,17 @@ api:
 restore:
 	(cd ./development && bash restoreOnly.sh)
 
-nginx-log:
+log-nginx:
 	docker exec development_nginx_1 cat /var/log/nginx/nginx-access.log > access.log
+
+log-mysql:
+	docker exec development_mysql_1 cat /var/log/mysql/slow.log > slow.log
+
+digest: mysql-log
+	pt-query-digest slow.log > result.txt
+	cat result.txt | discocat
+	rm slow.log result.txt
+
 
 ALP_CMD = alp ltsv --sort avg --reverse -m '/api/client/records/.+/comments,/api/client/records/.+/files/.+/thumbnail,/api/client/records/.+/files/.+,/api/client/records/.+'
 
@@ -29,4 +47,6 @@ alp: nginx-log
 	cat command.txt result.txt | discocat
 	rm access.log command.txt result.txt
 
-.PHONY: build eval log
+.PHONY: build down connect-mysql eval stress api restore nginx log-nginx log-mysql digest alp force
+
+# force:
