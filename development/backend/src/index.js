@@ -10,7 +10,8 @@ const pprof = require('pprof');
 async function prof() {
   console.log("start to profile >>>");
   const profile = await pprof.time.profile({
-    durationMillis: 240000,
+    // durationMillis: 240000, // for development
+    durationMillis: 30000, // for local
   });
 
   const buf = await pprof.encode(profile);
@@ -19,6 +20,13 @@ async function prof() {
       throw err;
     }
   });
+  
+  const profile_heap = await pprof.heap.profile();
+  const buf_heap = await pprof.encode(profile_heap);
+  fs.writeFile('heap.pb.gz', buf_heap, (err) => {
+    if (err) throw err;
+  })
+
   console.log("<<< finished to profile");
 }
 
@@ -145,7 +153,15 @@ app.get('/api/client/records/:recordId/files/:itemId/thumbnail', async (req, res
   }
 })
 
+
+// pprof related delete when submitting
 prof();
+// The average number of bytes between samples.
+const intervalBytes = 512 * 1024;
+// The maximum stack depth for samples collected.
+const stackDepth = 64;
+
+pprof.heap.start(intervalBytes, stackDepth); 
 
 app.listen(8000, () => console.log('listening on port 8000...'))
 
