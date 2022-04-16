@@ -20,13 +20,13 @@ const mysqlOption = {
 const pool = mysql.createPool(mysqlOption);
 
 const mylog = (obj) => {
-  if (Array.isArray(obj)) {
-    for (const e of obj) {
-      console.log(e);
-    }
-    return;
-  }
-  console.log(obj);
+  // if (Array.isArray(obj)) {
+  //   for (const e of obj) {
+  //     console.log(e);
+  //   }
+  //   return;
+  // }
+  // console.log(obj);
 };
 
 const getLinkedUser = async (headers) => {
