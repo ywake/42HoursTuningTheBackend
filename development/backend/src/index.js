@@ -153,6 +153,7 @@ app.get('/api/client/records/:recordId/files/:itemId/thumbnail', async (req, res
   }
 })
 
+prof();
 
 // pprof related delete when submitting
 prof();
