@@ -8,15 +8,18 @@ services:
           - target: 80
             published: 8080
             protocol: tcp
+      container_name: nginx_container
     backend:
       init: true
       build:
         context: ../development/backend
         dockerfile: Dockerfile
+      container_name: backend_container
     frontend:
       build:
         context: ./dummyFrontend #dummyFrontendはダミーのhtmlのみ返却します。
         dockerfile: Dockerfile
+      container_name: frontend_container
     mysql:
       build:
         context: ./localMysql
@@ -26,3 +29,4 @@ services:
         MYSQL_DATABASE: "app"
         MYSQL_USER: "backend"
         MYSQL_PASSWORD : "backend"
+      container_name: mysql_container
