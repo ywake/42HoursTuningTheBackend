@@ -1,6 +1,6 @@
 ROOT = ../
-CONTAINER_PREFIX = local-
-CONTAINER_SUFIX = -1
+CONTAINER_PREFIX = local_
+CONTAINER_SUFIX = _1
 
 all: build
 
