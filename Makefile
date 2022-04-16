@@ -33,7 +33,7 @@ log-nginx:
 log-mysql:
 	docker exec development_mysql_1 cat /var/log/mysql/slow.log > slow.log
 
-digest: mysql-log
+digest: log-mysql
 	pt-query-digest slow.log > result.txt
 	cat result.txt | discocat
 	rm slow.log result.txt
@@ -41,7 +41,7 @@ digest: mysql-log
 
 ALP_CMD = alp ltsv --sort avg --reverse -m '/api/client/records/.+/comments,/api/client/records/.+/files/.+/thumbnail,/api/client/records/.+/files/.+,/api/client/records/.+'
 
-alp: nginx-log
+alp: log-nginx
 	echo $(ALP_CMD) > command.txt
 	cat access.log | $(ALP_CMD) > result.txt
 	cat command.txt result.txt | discocat
