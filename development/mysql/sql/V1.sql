@@ -7,4 +7,6 @@ alter table group_info add index group_info_index(group_id);
 alter table record add index record_index(record_id, status);
 -- for allClose
 alter table record add index record_sorted_index(status, updated_at desc, record_id);
+alter table record add index b_index(created_by, status);
+alter table record_item_file add index c_index(linked_record_id, item_id);
 -- alter table record_item_file add index allclose_index(linked_record_id, item_id);
